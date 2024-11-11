@@ -201,39 +201,75 @@
     <script>
         //pass visible
         document.getElementById('togglePassword').addEventListener('click', function() {
-    const passwordInput = document.getElementById('password');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    this.textContent = type === 'password' ? '👁' : '🙈'; // Change icon based on visibility
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁' : '🙈'; // Change icon based on visibility
+        });
 
-            
-    document.getElementById('loginForm').addEventListener('submit', async function (event) {
-        event.preventDefault(); // Prevent the form from submitting normally
+        // Form submission logic
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+            // Clear previous error messages
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('formError').textContent = '';
 
-        try {
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }) // Send the login details as JSON
-            });
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            let hasError = false;
 
-            const result = await response.json(); // Parse the JSON response from the server
-
-            if (result.success) {
-                window.location.href = '/dashboard'; // Redirect on success
-            } else {
-                document.getElementById('formError').innerText = result.message; // Show error message
+            // Simple email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+                hasError = true;
             }
-        } catch (error) {
-            console.error('Login error:', error);
-            document.getElementById('formError').innerText = 'An error occurred during login.'; // Handle error
-        }
-    });
+
+            // Password validation (minimum 8 characters)
+            if (password.length < 8) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long.';
+                hasError = true;
+            }
+
+            if (hasError) {
+                return; // Stop form submission if there are validation errors
+            }
+
+            // Fetch login request
+            fetch('/index', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+                credentials: 'include' // Include credentials for session cookies
+            })
+            .then(response => {
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Login failed.'); // Handle error messages from the server
+                    }
+                    return data;
+                });
+            })
+            .then(data => {
+                if (data.success) {
+                    // Check user role and redirect accordingly
+                    if (data.role === 'admin') {
+                        window.location.href = '/admin_dashboard.html';
+                    } else {
+                        window.location.href = '/dashboard.html';
+                    }
+                } else {
+                    // Display error message
+                    document.getElementById('formError').textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error during login:', error);
+                document.getElementById('formError').textContent = error.message || 'An error occurred during login.';
+            });
+        });
     </script>
 </body>
 </html>
