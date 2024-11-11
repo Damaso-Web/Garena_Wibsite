@@ -12,7 +12,7 @@ const sgMail = require('@sendgrid/mail');
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb'); // Import MongoClient here
 const bcrypt = require('bcrypt');
-const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://anabua70:shabuhaymo20@cluster0.l3yoq.mongodb.net/';
+const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://anabua70:shabuhaymo20@cluster0.l3yoq.mongodb.net/test?retryWrites=true&w=majority&ssl=true';
 const client = new MongoClient(mongoUri); 
 const PORT = process.env.PORT || 3000;
 
