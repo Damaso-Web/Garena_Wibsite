@@ -47,7 +47,6 @@
             display: block;
             margin-bottom: 10px;
             color: #ccccccbd;
-          
             text-align: left;
         }
 
@@ -172,11 +171,11 @@
         .logout-container {
             display: none;
         }
-        </style>
+    </style>
 </head>
 <body>
     <div class="background">
-        <form id="loginForm" action="/login" method="post" class="form-container">
+        <form id="loginForm" class="form-container">
             <img src="garena3.jpg" alt="Garena" class="garena-image">
             <h3>Login</h3>
             <label for="email">Email</label>
@@ -198,6 +197,35 @@
             </div>
         </form>
     </div>
-    <script src="js/login.js"></script>
+
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }) // Send the login details as JSON
+            });
+
+            const result = await response.json(); // Parse the JSON response from the server
+
+            if (result.success) {
+                window.location.href = '/dashboard'; // Redirect on success
+            } else {
+                document.getElementById('formError').innerText = result.message; // Show error message
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            document.getElementById('formError').innerText = 'An error occurred during login.'; // Handle error
+        }
+    });
+    </script>
 </body>
 </html>
