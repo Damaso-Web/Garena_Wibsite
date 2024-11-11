@@ -228,34 +228,35 @@ const loginLimiter = rateLimit({
 });
 
 app.post('/login', loginLimiter, async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Email and password are required.' });
-    }
-    if (!validator.isEmail(email)) {
-      return res.status(400).json({ success: false, message: 'Invalid email format.' });
-    }
+    const { email, password } = req.body;
+    try {
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Email and password are required.' });
+        }
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ success: false, message: 'Invalid email format.' });
+        }
 
-    const user = await usersCollection.findOne({ emaildb: email });
-    if (!user) {
-      return res.status(400).json({ success: false, message: 'Invalid email or password.' });
+        const user = await usersCollection.findOne({ emaildb: email });
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'Invalid email or password.' });
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(400).json({ success: false, message: 'Invalid email or password.' });
+        }
+
+        req.session.userId = user._id;
+        req.session.email = user.emaildb;
+
+        res.json({ success: true, message: 'Login successful' });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(400).json({ success: false, message: 'Invalid email or password.' });
-    }
-
-    req.session.userId = user._id;
-    req.session.email = user.emaildb;
-
-    res.json({ success: true, message: 'Login successful' });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
 });
+
 
 // Serve user details (email)
 app.get('/user-details', (req, res) => {
