@@ -1,0 +1,133 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e1e;
+    color: #fff;
+    background-image: url('garena1.png');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 50px;
+}
+
+.userInfo {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.sidebar-welcome h2 {
+    font-size: 24px;
+    color: #fff;
+    margin: 0;
+}
+
+.sidebar-welcome span {
+    color: #ff4500;
+}
+
+#logoutLink {
+    color: #ff4e4e;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+#logoutLink:hover {
+    text-decoration: underline;
+}
+
+/* Garena Top-Up Section */
+.topup-section {
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 600px;
+}
+
+.topup-section h3 {
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.topup-section p {
+    font-size: 16px;
+    color: #ccc; /* Lighter text for description */
+    margin-bottom: 20px;
+}
+
+.topup-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+label {
+    font-size: 16px;
+    color: #fff; /* White color for labels */
+}
+
+input, select, button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #3e3e3e; /* Dark border */
+}
+
+input:focus, select:focus, button:focus {
+    border-color: #ff4500; /* Highlight focus with orange */
+    outline: none;
+}
+
+button {
+    background-color: #ff4500; /* Orange button color */
+    color: #fff; /* White text on the button */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #e63900; /* Darker orange when hovered */
+}
+
+.error-message, .success-message {
+    font-size: 16px;
+    color: #ff4e4e; /* Red for error messages */
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.success-message {
+    color: #28a745; /* Green for success messages */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .topup-section {
+        margin: 10px;
+    }
+
+    .sidebar-welcome h2 {
+        font-size: 20px;
+    }
+
+    .topup-section h3 {
+        font-size: 24px;
+    }
+}
