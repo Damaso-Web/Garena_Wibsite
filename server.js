@@ -221,7 +221,7 @@ function isValidPassword(password) {
 const loginLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 30 minutes
   max: 500, // Limit each IP to 5 requests per windowMs
-  message: 'Too many login attempts, please try again after 30 minutes.',
+  message: 'Too many login attempts, please try again after 5 minutes.',
   handler: function (req, res, next, options) {
     res.status(options.statusCode).json({ success: false, message: options.message });
   }
